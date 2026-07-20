@@ -1,0 +1,10 @@
+[{
+    "wrng_usrnm":"adminWrongUsername",
+    "wrong_passw" : "adminWrongPassword",
+    "invld_crd_txt" : "Invalid credentials"
+},
+{
+    "wrng_usrnm":"adminWrongUsername2",
+    "wrong_passw" : "adminWrongPassword2",
+    "invld_crd_txt" : "Invalid credentials"
+}]
