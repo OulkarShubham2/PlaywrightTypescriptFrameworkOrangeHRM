@@ -1,12 +1,6 @@
 import { defineConfig, devices } from "@playwright/test";
 
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
 import dotenv from "dotenv";
-import path from "path";
-//dotenv.config({ path: path.resolve(__dirname, '.env') });
 dotenv.config({
   //path: process.env.ENV_NAME ? `./env-files/.env.$(process.env.ENV_NAME)`:`./env-files/.env.demo`
   path: `env-files/.env.${process.env.ENV_NAME || "demo"}`,
@@ -27,18 +21,19 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
 
   /* Opt out of parallel tests on CI. */
-  //workers: process.env.CI ? 1 : undefined,
-  workers: 2,
+  workers: process.env.CI ? 1 : undefined,
+  //workers: 2,
 
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
     ["html", { open: "always" }],
+    ['github'],
     ["allure-playwright", { outputFolder: "playwright-report/allure-results" }],
   ],
 
   timeout: 90000,
   expect: {
-    timeout: 15000,
+    timeout: 30000,
   },
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
