@@ -1,6 +1,8 @@
 name: Playwright Regression Tests
 
 on:
+  push:
+    branches: [ main, master ]
   schedule:
     # 6:00 AM IST (00:30 UTC), Monday-Friday
     - cron: '30 0 * * 1-5'
