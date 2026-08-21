@@ -4,6 +4,7 @@ test.describe("Dashboard module @dashboard", () => {
   test("Verify dashboard landing page and visible dashboard widgets @smoke", async ({ page, dashBoardPage }) => {
     const baseUrl = process.env.BASE_URL || "https://opensource-demo.orangehrmlive.com";
     await page.goto(`${baseUrl}/web/index.php/dashboard/index`);
+    
     await expect(page).toHaveURL(/\/web\/index\.php\/dashboard\/index$/);
 
     await expect(dashBoardPage.dashBoardTitleText).toBeVisible();

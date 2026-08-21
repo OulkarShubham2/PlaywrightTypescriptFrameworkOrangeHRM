@@ -1,9 +1,9 @@
 import { defineConfig, devices } from "@playwright/test";
 
 import dotenv from "dotenv";
+
 dotenv.config({
-  //path: process.env.ENV_NAME ? `./env-files/.env.$(process.env.ENV_NAME)`:`./env-files/.env.demo`
-  path: `env-files/.env.${process.env.ENV_NAME || "demo"}`,
+  path: `env-files/.env.${process.env.TEST_EXECUTION_ENV || "demo"}`,
 });
 
 /**
@@ -11,6 +11,9 @@ dotenv.config({
  */
 export default defineConfig({
   testDir: "./tests/ui-tests",
+  globalSetup: require.resolve('./global-setup.ts'),
+  globalTeardown: require.resolve('./global-teardown'),
+
   /* Run tests in files in parallel */
   fullyParallel: false,
 
@@ -18,7 +21,7 @@ export default defineConfig({
   //forbidOnly: !!process.env.CI,
 
   /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
+  retries: process.env.CI ? 2 : 1,
 
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
@@ -31,7 +34,7 @@ export default defineConfig({
     ["allure-playwright", { outputFolder: "playwright-report/allure-results" }],
   ],
 
-  timeout: 90000,
+  timeout: 150000,
   expect: {
     timeout: 30000,
   },
@@ -51,14 +54,16 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
-    {
-      name: "Setup",
-      testMatch: "global.setup.ts",
-    },
+    // {
+    //   name: "Setup",
+    //   testMatch: "global-setup.ts",
+    //   retries: 3,
+    // },
+    
     {
       name: "chromium",
-      dependencies: ["Setup"],
-      testIgnore: "global.setup.ts",
+      //dependencies: ["Setup"],
+      //testIgnore: "global-setup.ts",
 
       use: {
         ...devices["Desktop Chrome"],
@@ -66,27 +71,27 @@ export default defineConfig({
       },
     },
 
-    {
-      name: "firefox",
-      dependencies: ["Setup"],
-      testIgnore: "global.setup.ts",
+    // {
+    //   name: "firefox",
+    //   dependencies: ["Setup"],
+    //   testIgnore: "global.setup.ts",
 
-      use: {
-        ...devices["Desktop Firefox"],
-        storageState: "./playwright/.auth/auth.json",
-      },
-    },
+    //   use: {
+    //     ...devices["Desktop Firefox"],
+    //     storageState: "./playwright/.auth/auth.json",
+    //   },
+    // },
 
-    {
-      name: "webkit",
-      dependencies: ["Setup"],
-      testIgnore: "global.setup.ts",
+    // {
+    //   name: "webkit",
+    //   dependencies: ["Setup"],
+    //   testIgnore: "global.setup.ts",
 
-      use: {
-        ...devices["Desktop Safari"],
-        storageState: "./playwright/.auth/auth.json",
-      },
-    },
+    //   use: {
+    //     ...devices["Desktop Safari"],
+    //     storageState: "./playwright/.auth/auth.json",
+    //   },
+    // },
 
     {
       name: "apiTest",

@@ -1,0 +1,7 @@
+{
+    "LoginTestData": {
+        "wrong_usrnm": "adminWrongUsername",
+        "wrong_passw": "adminWrongPassword",
+        "invld_crd_txt": "Invalid credentials"
+    }   
+}

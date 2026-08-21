@@ -20,7 +20,7 @@ export const test = baseTest.extend<PomFixturesType>({
   },
   
   dashBoardPage: async ({ page }, use) => {
-    await use(new DashBoardPage(page));
+    await use(new DashBoardPage(page)); 
   },
 
   userPage: async ({ page }, use) => {

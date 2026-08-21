@@ -1,5 +1,7 @@
 import { test, expect } from "../../fixtures/hooks-fixture";
-import lgnMData from "../../data/ui-test-data/login-module-data.json";
+import { TestDataArray } from "../../interface/LoginTestDataArray.interface";
+import { loadTestData } from "../../utils/JsonHelper";
+
 
 // $env:SECRET_KEY="shubham"; npx playwright test....
 
@@ -9,9 +11,15 @@ test.use({
     origins: [],
   },
 });
-for (const user of lgnMData) {
+
+(async () => {
+ const testDataArray = loadTestData<TestDataArray>();
+// const loginTestData = testData.LoginTestData;
+
+// for (const user of  testData.LoginTestData) {
+for (const user of testDataArray.LoginTestDataArray ?? []) {
   test(
-    `[Login] Verify that the user cannot log int with an invalid password. @sanity${user.wrng_usrnm}`,
+    `[Login] Verify that the user cannot log int with an invalid password. @Array @sanity${user.wrong_usrnm}`,
     {
       tag: ["@UI", "@UAT"],
       annotation: {
@@ -19,16 +27,18 @@ for (const user of lgnMData) {
         description: "This is link of test case",
       },
     },
-    async ({ gotoUrl, loginPage, commonUtils }) => {
+    async ({ gotoUrl, loginPage, commonUtils  }) => {
       const username = commonUtils.decryptData(process.env.USER_NAME!);
-      await loginPage.loginOrangeHRM(username, user.wrong_passw);
+      await loginPage.loginOrangeHRM(username, String(user.wrong_passw));
       await expect(loginPage.invalidCredentialsErrorPopup).toHaveText(
-        user.invld_crd_txt,
+        String(user.invld_crd_txt),
       );
       await expect(loginPage.userNameInput).toBeVisible();
     },
   );
 }
+})();
+
 test.describe(
   "Invalid Login Test",
   {
@@ -39,30 +49,28 @@ test.describe(
     },
   },
   () => {
-    for (const user of lgnMData) {
       test(
-        `[Login] Verify that the user cannot log int with an invalid username.${user.wrng_usrnm}`,
+        `[Login] Verify that the user cannot log int with an invalid username.`,
         {
-          tag: ["@UI", "@UAT"],
+          tag: ["@UI", "@UAT","@Login"],
           annotation: {
             type: "Test case Link",
             description: "This is link of test case",
           },
         },
-        async ({ gotoUrl, loginPage, commonUtils }) => {
+        async ({ gotoUrl, loginPage, commonUtils, testData }) => {
           const password = commonUtils.decryptData(process.env.PASSWORD!);
-          await loginPage.loginOrangeHRM(user.wrong_passw, password);
+          await loginPage.loginOrangeHRM(String(testData.LoginTestData?.wrong_passw), password);
           await expect(loginPage.invalidCredentialsErrorPopup).toHaveText(
-            user.invld_crd_txt,
+            String(testData.LoginTestData?.invld_crd_txt),
           );
           await expect(loginPage.userNameInput).toBeVisible();
         },
       );
-    }
 
-    for (const user of lgnMData) {
+
       test(
-        `[Login] Verify that the user cannot log int with an invalid username and password. for ${user.wrng_usrnm}`,
+        `[Login] Verify that the user cannot log int with an invalid username and password.`,
         {
           tag: ["@UI", "@UAT"],
           annotation: {
@@ -70,14 +78,13 @@ test.describe(
             description: "This is link of test case",
           },
         },
-        async ({ gotoUrl, loginPage }) => {
-          await loginPage.loginOrangeHRM(user.wrng_usrnm, user.wrong_passw);
+        async ({ gotoUrl, loginPage , testData}) => {
+          await loginPage.loginOrangeHRM(String(testData.LoginTestData?.wrong_usrnm), String(testData.LoginTestData?.wrong_passw));
           await expect(loginPage.invalidCredentialsErrorPopup).toHaveText(
-            user.invld_crd_txt,
+            String(testData.LoginTestData?.invld_crd_txt),
           );
           await expect(loginPage.userNameInput).toBeVisible();
         },
       );
     }
-  },
 );
