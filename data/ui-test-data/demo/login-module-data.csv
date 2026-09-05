@@ -1,0 +1,3 @@
+username,password,invalidCredText
+WrongAdminUser,WrongAdminPassword,Invalid credentials
+WrongAdminUser2,WrongAdminPassword2,Invalid credentials
