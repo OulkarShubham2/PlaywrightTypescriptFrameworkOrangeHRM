@@ -18,7 +18,7 @@ jobs:
           server_address: smtp.gmail.com
           server_port: 465
           secure: true
-          username: ${{ secrets.EMAIL_USERNAME }}
+          username: shubham.oulkar6102@gmail.com
           password: ${{ secrets.EMAIL_PASSWORD }}
 
           subject: Playwright Regression - ${{ github.event.workflow_run.conclusion }}
